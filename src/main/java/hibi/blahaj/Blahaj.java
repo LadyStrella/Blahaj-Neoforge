@@ -4,24 +4,71 @@ package hibi.blahaj;
 
 import com.mojang.logging.LogUtils;
 import hibi.blahaj.block.*;
-import net.minecraft.item.*;
-import net.minecraft.loot.*;
-import net.minecraft.loot.entry.*;
-import net.minecraft.village.*;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
 
-//@Mod(Blahaj.MOD_ID)
+@Mod(Blahaj.MOD_ID)
 public class Blahaj{
 
 	public static final String MOD_ID = "blahaj";
 	private static final Logger LOGGER = LogUtils.getLogger();
 
-	public void onInitialize() {
-		BlahajDataComponentTypes.register();
-		BlahajBlocks.register();
+	public Blahaj(IEventBus modEventBus, ModContainer modContainer) {
+		modEventBus.addListener(this::commonSetup);
+		NeoForge.EVENT_BUS.register(this);
+//		modEventBus.register(ModEvents.class);
+//		ModdedItems.register(modEventBus);
+		modEventBus.addListener(this::addCreative);
+//		modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+	}
+
+	private void commonSetup(FMLCommonSetupEvent event) {
+	}
+
+	private void addCreative(BuildCreativeModeTabContentsEvent event) {
+//		if (event.getTabKey() == CreativeModeTabs.COMBAT) {
+//			event.accept(ModdedItems.ARMADILLO_BOOTS);
+//		}
+
+	}
+
+	@SubscribeEvent
+	public void onServerStarting(ServerStartingEvent event) {
+	}
+
+	@EventBusSubscriber(
+		modid = "blahaj",
+		bus = EventBusSubscriber.Bus.MOD,
+		value = {Dist.CLIENT}
+	)
+	public static class ClientModEvents {
+		public ClientModEvents() {
+		}
+
+		@SubscribeEvent
+		public static void onClientSetup(FMLClientSetupEvent event) {
+		}
+	}
+
+
+//	public void onInitialize() {
+//		BlahajDataComponentTypes.register();
+//		BlahajBlocks.register();
 //		registerLootTables();
 //		registerTrades();
-	}
+//	}
 
 //	private static void registerLootTables() {
 //		LootTableEvents.MODIFY.register((key, tableBuilder, source) -> {
